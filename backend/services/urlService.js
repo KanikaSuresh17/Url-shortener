@@ -26,7 +26,7 @@ async function createShortUrl(originalUrl, userId) {
   });
 
   const urlJson = urlRecord.toJSON();
-  urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/s/${shortCode}`;
+  urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/${shortCode}`;
   return urlJson;
 }
 
@@ -49,7 +49,7 @@ async function getUrlsByUserId(userId) {
   });
   return urls.map(url => {
     const urlJson = url.toJSON();
-    urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/s/${url.shortCode}`;
+    urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/${url.shortCode}`;
     return urlJson;
   });
 }
@@ -82,7 +82,7 @@ async function getUrlAnalytics(id, userId, isAdmin = false) {
   });
 
   const urlJson = url.toJSON();
-  urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/s/${url.shortCode}`;
+  urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/${url.shortCode}`;
 
   return {
     url: urlJson,
@@ -140,7 +140,7 @@ async function getAllUrlsAdmin() {
   });
   return urls.map(url => {
     const urlJson = url.toJSON();
-    urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/s/${url.shortCode}`;
+    urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/${url.shortCode}`;
     return urlJson;
   });
 }

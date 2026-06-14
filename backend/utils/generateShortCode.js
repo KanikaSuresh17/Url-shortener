@@ -7,8 +7,8 @@ async function generateShortCode() {
 
   while (!isUnique) {
     code = '';
-    // Generate length between 6 and 8
-    const length = Math.floor(Math.random() * 3) + 6;
+    // Generate length of 5 characters
+    const length = 5;
     for (let i = 0; i < length; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }

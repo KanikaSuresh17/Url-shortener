@@ -136,7 +136,7 @@ export default function Dashboard({ user, setUser }) {
 
   const handleCopy = (id, shortCode) => {
     const urlObj = urls.find((u) => u.id === id);
-    const fullShortUrl = urlObj?.shortUrl || `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/s/${shortCode}`;
+    const fullShortUrl = urlObj?.shortUrl || `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/${shortCode}`;
     navigator.clipboard.writeText(fullShortUrl).then(() => {
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
@@ -266,12 +266,12 @@ export default function Dashboard({ user, setUser }) {
                     {/* Shortened and Original URLs */}
                     <div className="url-info">
                       <a 
-                        href={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/s/${url.shortCode}`} 
+                        href={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/${url.shortCode}`} 
                         target="_blank" 
                         rel="noreferrer" 
                         className="short-url-link"
                       >
-                        {url.shortUrl || `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/s/${url.shortCode}`}
+                        {url.shortUrl || `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/${url.shortCode}`}
                         <ExternalLink size={14} style={{ opacity: 0.6 }} />
                       </a>
                       <span className="long-url" title={url.originalUrl}>

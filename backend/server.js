@@ -45,7 +45,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/urls', urlRoutes);
 
 // Public redirect route
-app.get(['/:shortCode', '/s/:shortCode'], async (req, res, next) => {
+app.get('/:shortCode', async (req, res, next) => {
   try {
     const { shortCode } = req.params;
     const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
