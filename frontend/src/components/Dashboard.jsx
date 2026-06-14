@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../utils/api';
 import Navbar from './Navbar';
 import AnalyticsPanel from './AnalyticsView';
+import { QRCodeSVG } from 'qrcode.react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 import { 
   Link2, Plus, Copy, Check, BarChart2, Trash2, 
-  ExternalLink, Calendar, HelpCircle, ChevronDown 
+  ExternalLink, Calendar, HelpCircle, ChevronDown, QrCode, Download
 } from 'lucide-react';
 
 export default function Dashboard({ user, setUser }) {
@@ -19,7 +20,9 @@ export default function Dashboard({ user, setUser }) {
   const [successMsg, setSuccessMsg] = useState('');
   const [copiedId, setCopiedId] = useState(null);
   const [activeAnalyticsId, setActiveAnalyticsId] = useState(null);
+  const [activeQrId, setActiveQrId] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
+  const qrRefs = useRef({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -299,31 +302,54 @@ export default function Dashboard({ user, setUser }) {
                       </span>
                     </div>
 
-                    {/* Analytics Toggle Button */}
+                    {/* Analytics + QR Toggle Buttons */}
                     <div className="link-stat">
                       <span className="stat-label">Performance</span>
-                      <button 
-                        onClick={() => setActiveAnalyticsId(activeAnalyticsId === url.id ? null : url.id)}
-                        className="btn-logout" 
-                        style={{ 
-                          border: '1px solid rgba(168, 85, 247, 0.2)', 
-                          color: 'var(--secondary)', 
-                          display: 'inline-flex', 
-                          gap: '4px', 
-                          width: 'fit-content',
-                          background: activeAnalyticsId === url.id ? 'rgba(168, 85, 247, 0.1)' : 'transparent',
-                        }}
-                      >
-                        <BarChart2 size={13} />
-                        <span>{activeAnalyticsId === url.id ? 'Collapse' : 'Analytics'}</span>
-                        <ChevronDown 
-                          size={13} 
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        <button 
+                          onClick={() => {
+                            setActiveAnalyticsId(activeAnalyticsId === url.id ? null : url.id);
+                            setActiveQrId(null);
+                          }}
+                          className="btn-logout" 
                           style={{ 
-                            transition: 'transform 0.25s ease',
-                            transform: activeAnalyticsId === url.id ? 'rotate(180deg)' : 'rotate(0deg)'
-                          }} 
-                        />
-                      </button>
+                            border: '1px solid rgba(168, 85, 247, 0.2)', 
+                            color: 'var(--secondary)', 
+                            display: 'inline-flex', 
+                            gap: '4px', 
+                            width: 'fit-content',
+                            background: activeAnalyticsId === url.id ? 'rgba(168, 85, 247, 0.1)' : 'transparent',
+                          }}
+                        >
+                          <BarChart2 size={13} />
+                          <span>{activeAnalyticsId === url.id ? 'Collapse' : 'Analytics'}</span>
+                          <ChevronDown 
+                            size={13} 
+                            style={{ 
+                              transition: 'transform 0.25s ease',
+                              transform: activeAnalyticsId === url.id ? 'rotate(180deg)' : 'rotate(0deg)'
+                            }} 
+                          />
+                        </button>
+                        <button 
+                          onClick={() => {
+                            setActiveQrId(activeQrId === url.id ? null : url.id);
+                            setActiveAnalyticsId(null);
+                          }}
+                          className="btn-logout" 
+                          style={{ 
+                            border: '1px solid rgba(16, 185, 129, 0.25)', 
+                            color: 'var(--accent)', 
+                            display: 'inline-flex', 
+                            gap: '4px', 
+                            width: 'fit-content',
+                            background: activeQrId === url.id ? 'rgba(16, 185, 129, 0.08)' : 'transparent',
+                          }}
+                        >
+                          <QrCode size={13} />
+                          <span>{activeQrId === url.id ? 'Hide QR' : 'QR Code'}</span>
+                        </button>
+                      </div>
                     </div>
 
                     {/* Actions: Copy & Delete */}
@@ -357,6 +383,73 @@ export default function Dashboard({ user, setUser }) {
                     >
                       {activeAnalyticsId === url.id && (
                         <AnalyticsPanel urlId={url.id} />
+                      )}
+                    </div>
+
+                    {/* Inline QR Code Panel */}
+                    <div
+                      className="analytics-expand-wrapper"
+                      style={{
+                        maxHeight: activeQrId === url.id ? '360px' : '0px',
+                        opacity: activeQrId === url.id ? 1 : 0,
+                        overflow: 'hidden',
+                        transition: 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                        pointerEvents: activeQrId === url.id ? 'auto' : 'none',
+                      }}
+                    >
+                      {activeQrId === url.id && (
+                        <div className="analytics-inline-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '20px' }}>
+                          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0, textAlign: 'center' }}>
+                            Scan to open: <strong style={{ color: 'var(--text-secondary)' }}>{url.shortUrl || url.shortCode}</strong>
+                          </p>
+                          <div
+                            ref={el => qrRefs.current[url.id] = el}
+                            style={{
+                              background: '#ffffff',
+                              padding: '12px',
+                              borderRadius: '12px',
+                              display: 'inline-block',
+                              boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
+                            }}
+                          >
+                            <QRCodeSVG
+                              value={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`}
+                              size={160}
+                              bgColor="#ffffff"
+                              fgColor="#0f172a"
+                              level="M"
+                              includeMargin={false}
+                            />
+                          </div>
+                          <button
+                            className="btn btn-primary"
+                            style={{ fontSize: '0.8rem', padding: '8px 18px', display: 'inline-flex', gap: '6px', alignItems: 'center' }}
+                            onClick={() => {
+                              const svgEl = qrRefs.current[url.id]?.querySelector('svg');
+                              if (!svgEl) return;
+                              const svgData = new XMLSerializer().serializeToString(svgEl);
+                              const canvas = document.createElement('canvas');
+                              const size = 320;
+                              canvas.width = size;
+                              canvas.height = size;
+                              const ctx = canvas.getContext('2d');
+                              const img = new Image();
+                              img.onload = () => {
+                                ctx.fillStyle = '#ffffff';
+                                ctx.fillRect(0, 0, size, size);
+                                ctx.drawImage(img, 0, 0, size, size);
+                                const a = document.createElement('a');
+                                a.download = `qr-${url.shortCode}.png`;
+                                a.href = canvas.toDataURL('image/png');
+                                a.click();
+                              };
+                              img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            }}
+                          >
+                            <Download size={14} />
+                            Download QR
+                          </button>
+                        </div>
                       )}
                     </div>
                   </motion.div>
