@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { KeyRound, Eye, EyeOff, Link2, ArrowRight } from 'lucide-react';
 
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL || ''}/api`;
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();

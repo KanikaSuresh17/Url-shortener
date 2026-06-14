@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, ArrowRight, Link2 } from 'lucide-react';
 
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL || ''}/api`;
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');

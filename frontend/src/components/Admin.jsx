@@ -44,7 +44,7 @@ export default function Admin({ user, setUser }) {
   }, [navigate, user]);
 
   useEffect(() => {
-    const socket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000');
+    const socket = io(import.meta.env.VITE_BACKEND_URL);
 
     socket.on('click_update', (data) => {
       setUrls((prevUrls) => {
@@ -177,7 +177,7 @@ export default function Admin({ user, setUser }) {
                       </td>
                       <td>
                         <a 
-                          href={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/${url.shortCode}`} 
+                          href={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`} 
                           target="_blank" 
                           rel="noreferrer" 
                           style={{ color: 'var(--primary)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
