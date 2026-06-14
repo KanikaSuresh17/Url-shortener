@@ -10,6 +10,7 @@ router.use(authMiddleware);
 router.post('/', urlController.create);
 router.get('/', urlController.list);
 router.delete('/:id', urlController.deleteUrl);
+router.put('/:id', urlController.updateUrl);
 router.get('/:id/analytics', urlController.getAnalytics);
 
 // Admin-only Endpoints

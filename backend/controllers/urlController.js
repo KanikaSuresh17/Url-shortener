@@ -40,6 +40,23 @@ async function deleteUrl(req, res, next) {
   }
 }
 
+async function updateUrl(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { originalUrl } = req.body;
+    if (!originalUrl) {
+      return res.status(400).json({ error: 'New URL is required' });
+    }
+    const updated = await urlService.updateUrl(Number(id), req.userId, originalUrl);
+    res.json(updated);
+  } catch (err) {
+    if (err.status) {
+      return res.status(err.status).json({ error: err.message });
+    }
+    next(err);
+  }
+}
+
 async function getAnalytics(req, res, next) {
   try {
     const { id } = req.params;
@@ -81,6 +98,7 @@ module.exports = {
   create,
   list,
   deleteUrl,
+  updateUrl,
   getAnalytics,
   listAllAdmin,
   adminDelete,

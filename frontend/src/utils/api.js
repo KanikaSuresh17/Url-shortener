@@ -100,6 +100,13 @@ export const api = {
     });
   },
 
+  updateUrl: async (id, originalUrl) => {
+    return await request(`/urls/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ originalUrl })
+    });
+  },
+
   // Analytics
   getAnalytics: async (id) => {
     return await request(`/urls/${id}/analytics`);

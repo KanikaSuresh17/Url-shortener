@@ -7,7 +7,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 import { 
-  Link2, Plus, Copy, Check, BarChart2, Trash2, 
+  Link2, Plus, Copy, Check, BarChart2, Trash2, Pencil,
   ExternalLink, Calendar, HelpCircle, ChevronDown, QrCode, Download
 } from 'lucide-react';
 
@@ -22,6 +22,10 @@ export default function Dashboard({ user, setUser }) {
   const [activeAnalyticsId, setActiveAnalyticsId] = useState(null);
   const [activeQrId, setActiveQrId] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [editValue, setEditValue] = useState('');
+  const [editSubmitting, setEditSubmitting] = useState(false);
+  const [editError, setEditError] = useState('');
   const qrRefs = useRef({});
   const navigate = useNavigate();
 
@@ -146,6 +150,48 @@ export default function Dashboard({ user, setUser }) {
     }).catch(() => {
       alert('Failed to copy to clipboard.');
     });
+  };
+
+  const handleEditClick = (url) => {
+    if (editingId === url.id) {
+      setEditingId(null);
+    } else {
+      setEditingId(url.id);
+      setEditValue(url.originalUrl);
+      setEditError('');
+      setActiveAnalyticsId(null);
+      setActiveQrId(null);
+    }
+  };
+
+  const handleSaveEdit = async (e, id) => {
+    e.preventDefault();
+    setEditError('');
+
+    if (!editValue.trim()) {
+      setEditError('Please enter a URL');
+      return;
+    }
+
+    if (!validateUrl(editValue)) {
+      setEditError('Please enter a valid HTTP/HTTPS URL (e.g. google.com or https://example.com)');
+      return;
+    }
+
+    setEditSubmitting(true);
+    try {
+      const updatedUrl = await api.updateUrl(id, editValue.trim());
+      setUrls((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, originalUrl: updatedUrl.originalUrl } : u))
+      );
+      setEditingId(null);
+      setSuccessMsg('Destination URL updated successfully!');
+      setTimeout(() => setSuccessMsg(''), 4000);
+    } catch (err) {
+      setEditError(err.message || 'Failed to update URL');
+    } finally {
+      setEditSubmitting(false);
+    }
   };
 
   const formatDate = (isoString) => {
@@ -310,6 +356,7 @@ export default function Dashboard({ user, setUser }) {
                           onClick={() => {
                             setActiveAnalyticsId(activeAnalyticsId === url.id ? null : url.id);
                             setActiveQrId(null);
+                            setEditingId(null);
                           }}
                           className="btn-logout" 
                           style={{ 
@@ -335,6 +382,7 @@ export default function Dashboard({ user, setUser }) {
                           onClick={() => {
                             setActiveQrId(activeQrId === url.id ? null : url.id);
                             setActiveAnalyticsId(null);
+                            setEditingId(null);
                           }}
                           className="btn-logout" 
                           style={{ 
@@ -352,8 +400,19 @@ export default function Dashboard({ user, setUser }) {
                       </div>
                     </div>
 
-                    {/* Actions: Copy & Delete */}
+                    {/* Actions: Edit, Copy & Delete */}
                     <div className="link-actions">
+                      <button 
+                        className="action-btn"
+                        onClick={() => handleEditClick(url)}
+                        title="Edit original URL"
+                        style={{
+                          color: editingId === url.id ? 'var(--primary)' : 'inherit',
+                          background: editingId === url.id ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+                        }}
+                      >
+                        <Pencil size={18} />
+                      </button>
                       <button 
                         className="action-btn" 
                         onClick={() => handleCopy(url.id, url.shortCode)}
@@ -368,6 +427,64 @@ export default function Dashboard({ user, setUser }) {
                       >
                         <Trash2 size={18} />
                       </button>
+                    </div>
+
+                    {/* Inline Edit Panel */}
+                    <div 
+                      className="analytics-expand-wrapper"
+                      style={{
+                        maxHeight: editingId === url.id ? '220px' : '0px',
+                        opacity: editingId === url.id ? 1 : 0,
+                        overflow: 'hidden',
+                        transition: 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                        pointerEvents: editingId === url.id ? 'auto' : 'none',
+                      }}
+                    >
+                      {editingId === url.id && (
+                        <div className="analytics-inline-panel" style={{ padding: '20px' }}>
+                          <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '12px', color: 'var(--text-secondary)' }}>
+                            Edit Destination URL
+                          </h4>
+                          <form onSubmit={(e) => handleSaveEdit(e, url.id)} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <div className="input-container" style={{ width: '100%' }}>
+                              <Link2 className="input-icon" style={{ left: '12px', width: '16px', height: '16px' }} />
+                              <input
+                                type="text"
+                                className="form-input"
+                                style={{ width: '100%', paddingLeft: '38px', height: '42px', fontSize: '0.9rem' }}
+                                placeholder="Enter new destination URL (e.g. google.com)..."
+                                value={editValue}
+                                onChange={(e) => setEditValue(e.target.value)}
+                                disabled={editSubmitting}
+                              />
+                            </div>
+                            {editError && (
+                              <div style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '-4px' }}>
+                                {editError}
+                              </div>
+                            )}
+                            <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+                              <button
+                                type="submit"
+                                className="btn btn-primary"
+                                style={{ fontSize: '0.8rem', padding: '8px 16px', width: 'auto', minHeight: 'unset', height: '36px' }}
+                                disabled={editSubmitting}
+                              >
+                                {editSubmitting ? 'Saving...' : 'Save'}
+                              </button>
+                              <button
+                                type="button"
+                                className="btn-logout"
+                                style={{ fontSize: '0.8rem', padding: '8px 16px', border: '1px solid var(--border-color)' }}
+                                onClick={() => setEditingId(null)}
+                                disabled={editSubmitting}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      )}
                     </div>
 
                     {/* Inline Analytics Panel */}

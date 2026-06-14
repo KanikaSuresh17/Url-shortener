@@ -63,6 +63,29 @@ async function deleteUrl(id, userId) {
   return { message: 'URL deleted successfully' };
 }
 
+async function updateUrl(id, userId, newOriginalUrl) {
+  // Validate URL format
+  let formattedUrl = newOriginalUrl.trim();
+  if (!/^https?:\/\//i.test(formattedUrl)) {
+    formattedUrl = 'http://' + formattedUrl;
+  }
+  if (!validator.isURL(formattedUrl, { require_protocol: true })) {
+    throw { status: 400, message: 'Invalid URL format' };
+  }
+
+  const url = await Url.findOne({ where: { id, userId } });
+  if (!url) {
+    throw { status: 404, message: 'URL not found or unauthorized' };
+  }
+
+  url.originalUrl = formattedUrl;
+  await url.save();
+
+  const urlJson = url.toJSON();
+  urlJson.shortUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/${url.shortCode}`;
+  return urlJson;
+}
+
 async function getUrlAnalytics(id, userId, isAdmin = false) {
   const query = isAdmin ? { id } : { id, userId };
   const url = await Url.findOne({ where: query });
@@ -158,6 +181,7 @@ module.exports = {
   createShortUrl,
   getUrlsByUserId,
   deleteUrl,
+  updateUrl,
   getUrlAnalytics,
   redirectShortCode,
   getAllUrlsAdmin,
