@@ -65,7 +65,7 @@ export default function Login({ setUser }) {
           <div className="auth-logo-icon-wrap">
             <Zap fill="#8bc34a" />
           </div>
-          <span className="auth-logo-name">SnipURL</span>
+          <span className="auth-logo-name">MagicURL</span>
         </div>
 
         <h2 className="auth-title">Welcome Back</h2>
