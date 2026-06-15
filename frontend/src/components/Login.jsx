@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../utils/api';
 import { motion } from 'framer-motion';
-import { Mail, KeyRound, ArrowRight, Eye, EyeOff, Link2 } from 'lucide-react';
+import { Mail, KeyRound, ArrowRight, Eye, EyeOff, Zap } from 'lucide-react';
 
 export default function Login({ setUser }) {
   const [email, setEmail] = useState('');
@@ -50,6 +50,10 @@ export default function Login({ setUser }) {
 
   return (
     <div className="auth-container">
+      {/* Decorative Fixed Shapes */}
+      <div className="decor-bg-shape-1"></div>
+      <div className="decor-bg-shape-2"></div>
+
       <motion.div
         className="auth-card"
         initial={{ opacity: 0, y: 24 }}
@@ -59,7 +63,7 @@ export default function Login({ setUser }) {
         {/* Logo */}
         <div className="auth-logo-header">
           <div className="auth-logo-icon-wrap">
-            <Link2 />
+            <Zap fill="#8bc34a" />
           </div>
           <span className="auth-logo-name">SnipURL</span>
         </div>
