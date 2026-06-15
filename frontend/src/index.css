@@ -1468,3 +1468,19 @@ a {
   }
 }
 
+/* Login Hint Pulse Animation */
+@keyframes blink-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.login-hint-banner {
+  font-size: 13px;
+  color: var(--primary);
+  text-align: center;
+  margin-top: 16px;
+  animation: blink-pulse 2s ease-in-out infinite;
+  font-weight: 500;
+}
+
+

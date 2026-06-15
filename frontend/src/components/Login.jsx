@@ -144,6 +144,10 @@ export default function Login({ setUser }) {
             <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
             <Link to="/register" className="auth-link">Sign Up</Link>
           </div>
+
+          <div className="login-hint-banner">
+            ✨ New here? Click "Sign Up" to create your account!
+          </div>
         </form>
       </motion.div>
     </div>
