@@ -104,7 +104,10 @@ export default function Admin({ user, setUser }) {
       navigate('/dashboard');
       return;
     }
-    alert(`${tabName} section is available on the main Dashboard.`);
+    if (tabName === 'Analytics') {
+      navigate('/dashboard');  // analytics dashboard la irukkunu redirect pannidu
+      return;
+    }
   };
 
   // Compute stats
@@ -131,9 +134,6 @@ export default function Admin({ user, setUser }) {
               { name: 'Dashboard', icon: LayoutDashboard },
               { name: 'Admin Panel', icon: Shield },
               { name: 'Analytics', icon: BarChart2 },
-              { name: 'Domains', icon: Globe },
-              { name: 'Settings', icon: Settings },
-              { name: 'Billing', icon: CreditCard },
               { name: 'Logout', icon: LogOut },
             ].map((item) => {
               const IconComp = item.icon;
