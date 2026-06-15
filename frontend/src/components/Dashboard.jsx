@@ -5,7 +5,7 @@ import AnalyticsPanel from './AnalyticsView';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
-import { 
+import {
   Link2, Plus, Copy, Check, BarChart2, Trash2, Pencil,
   ExternalLink, Calendar, HelpCircle, ChevronDown, QrCode, Download,
   Zap, Crown, LayoutDashboard, Globe, Users, Settings, CreditCard, LogOut, Shield, TrendingUp, Award, Activity
@@ -67,10 +67,10 @@ export default function Dashboard({ user, setUser }) {
           setTimeout(() => setHighlightedId(null), 1000);
 
           const updated = [...prevUrls];
-          updated[index] = { 
-            ...updated[index], 
-            clicks: data.clicks, 
-            lastVisited: new Date().toISOString() 
+          updated[index] = {
+            ...updated[index],
+            clicks: data.clicks,
+            lastVisited: new Date().toISOString()
           };
           return updated;
         }
@@ -241,7 +241,7 @@ export default function Dashboard({ user, setUser }) {
         <div>
           <div className="sidebar-logo">
             <Zap className="logo-icon-green" size={24} fill="#8bc34a" />
-            <span>SnipURL</span>
+            <span>MagicURL</span>
           </div>
 
           <nav className="sidebar-nav">
@@ -285,7 +285,7 @@ export default function Dashboard({ user, setUser }) {
         <header className="top-header">
           {/* Decorative Triangles in top right of top header */}
           <div className="decor-triangle-header"></div>
-          
+
           <div className="header-left">
             {user && (
               <div className="user-email-pill">
@@ -294,9 +294,9 @@ export default function Dashboard({ user, setUser }) {
               </div>
             )}
             {user?.role === 'admin' && (
-              <button 
-                className="user-email-pill" 
-                onClick={() => navigate('/admin')} 
+              <button
+                className="user-email-pill"
+                onClick={() => navigate('/admin')}
                 style={{ marginLeft: '12px', cursor: 'pointer', border: '1px solid var(--primary)', background: 'rgba(139, 195, 74, 0.1)' }}
               >
                 <Shield size={14} style={{ color: 'var(--primary)' }} />
@@ -402,8 +402,8 @@ export default function Dashboard({ user, setUser }) {
 
                 <AnimatePresence>
                   {error && (
-                    <motion.div 
-                      className="alert alert-danger" 
+                    <motion.div
+                      className="alert alert-danger"
                       style={{ marginTop: '20px', marginBottom: '0' }}
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -414,8 +414,8 @@ export default function Dashboard({ user, setUser }) {
                   )}
 
                   {successMsg && (
-                    <motion.div 
-                      className="alert alert-success" 
+                    <motion.div
+                      className="alert alert-success"
                       style={{ marginTop: '20px', marginBottom: '0' }}
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -453,8 +453,8 @@ export default function Dashboard({ user, setUser }) {
                         // alternating green, teal, blue
                         const colorClass = index % 3 === 0 ? 'green' : index % 3 === 1 ? 'teal' : 'blue';
                         return (
-                          <motion.div 
-                            key={url.id} 
+                          <motion.div
+                            key={url.id}
                             className={`link-row-card ${highlightedId === url.id ? 'flash-highlight' : ''}`}
                             layout
                             initial={{ opacity: 0, y: 15 }}
@@ -470,10 +470,10 @@ export default function Dashboard({ user, setUser }) {
                                   <Link2 size={18} />
                                 </div>
                                 <div className="url-info">
-                                  <a 
-                                    href={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`} 
-                                    target="_blank" 
-                                    rel="noreferrer" 
+                                  <a
+                                    href={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`}
+                                    target="_blank"
+                                    rel="noreferrer"
                                     className="short-url-link"
                                   >
                                     {url.shortUrl || `${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`}
@@ -509,18 +509,18 @@ export default function Dashboard({ user, setUser }) {
                               <div className="link-stat">
                                 <span className="stat-label">Performance</span>
                                 <div style={{ display: 'flex', gap: '6px' }}>
-                                  <button 
+                                  <button
                                     onClick={() => {
                                       setActiveAnalyticsId(activeAnalyticsId === url.id ? null : url.id);
                                       setActiveQrId(null);
                                       setEditingId(null);
                                     }}
-                                    className="btn-logout" 
-                                    style={{ 
-                                      border: '1px solid rgba(0, 188, 212, 0.2)', 
-                                      color: 'var(--secondary-accent)', 
-                                      display: 'inline-flex', 
-                                      gap: '4px', 
+                                    className="btn-logout"
+                                    style={{
+                                      border: '1px solid rgba(0, 188, 212, 0.2)',
+                                      color: 'var(--secondary-accent)',
+                                      display: 'inline-flex',
+                                      gap: '4px',
                                       width: 'fit-content',
                                       background: activeAnalyticsId === url.id ? 'rgba(0, 188, 212, 0.1)' : 'transparent',
                                       padding: '6px 10px',
@@ -530,18 +530,18 @@ export default function Dashboard({ user, setUser }) {
                                     <BarChart2 size={12} />
                                     <span>{activeAnalyticsId === url.id ? 'Collapse' : 'Analytics'}</span>
                                   </button>
-                                  <button 
+                                  <button
                                     onClick={() => {
                                       setActiveQrId(activeQrId === url.id ? null : url.id);
                                       setActiveAnalyticsId(null);
                                       setEditingId(null);
                                     }}
-                                    className="btn-logout" 
-                                    style={{ 
-                                      border: '1px solid rgba(139, 195, 74, 0.25)', 
-                                      color: 'var(--primary-accent)', 
-                                      display: 'inline-flex', 
-                                      gap: '4px', 
+                                    className="btn-logout"
+                                    style={{
+                                      border: '1px solid rgba(139, 195, 74, 0.25)',
+                                      color: 'var(--primary-accent)',
+                                      display: 'inline-flex',
+                                      gap: '4px',
                                       width: 'fit-content',
                                       background: activeQrId === url.id ? 'rgba(139, 195, 74, 0.08)' : 'transparent',
                                       padding: '6px 10px',
@@ -556,7 +556,7 @@ export default function Dashboard({ user, setUser }) {
 
                               {/* Actions: edit, copy, delete */}
                               <div className="link-actions">
-                                <button 
+                                <button
                                   className="action-btn"
                                   onClick={() => handleEditClick(url)}
                                   title="Edit original URL"
@@ -567,15 +567,15 @@ export default function Dashboard({ user, setUser }) {
                                 >
                                   <Pencil size={16} />
                                 </button>
-                                <button 
-                                  className="action-btn" 
+                                <button
+                                  className="action-btn"
                                   onClick={() => handleCopy(url.id, url.shortCode)}
                                   title="Copy short link"
                                 >
                                   {copiedId === url.id ? <Check size={16} style={{ color: 'var(--primary-accent)' }} /> : <Copy size={16} />}
                                 </button>
-                                <button 
-                                  className="action-btn btn-delete" 
+                                <button
+                                  className="action-btn btn-delete"
                                   onClick={() => handleDelete(url.id)}
                                   title="Delete URL"
                                 >
@@ -585,7 +585,7 @@ export default function Dashboard({ user, setUser }) {
                             </div>
 
                             {/* Inline Edit Panel */}
-                            <div 
+                            <div
                               className="analytics-expand-wrapper"
                               style={{
                                 maxHeight: editingId === url.id ? '220px' : '0px',
@@ -644,7 +644,7 @@ export default function Dashboard({ user, setUser }) {
                             </div>
 
                             {/* Inline Analytics Panel */}
-                            <div 
+                            <div
                               className="analytics-expand-wrapper"
                               style={{
                                 maxHeight: activeAnalyticsId === url.id ? '800px' : '0px',
@@ -783,9 +783,9 @@ export default function Dashboard({ user, setUser }) {
                 <h3 style={{ marginBottom: '16px' }}>Performance Highlights</h3>
                 <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>Here is a ranking of your most active links by click volume:</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {[...urls].sort((a,b) => (b.clicks||0) - (a.clicks||0)).slice(0, 5).map((url, idx) => (
+                  {[...urls].sort((a, b) => (b.clicks || 0) - (a.clicks || 0)).slice(0, 5).map((url, idx) => (
                     <div key={url.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontWeight: '600' }}>#{idx+1} {url.shortCode}</span>
+                      <span style={{ fontWeight: '600' }}>#{idx + 1} {url.shortCode}</span>
                       <span style={{ color: 'var(--secondary-accent)', fontWeight: 'bold' }}>{url.clicks || 0} Clicks</span>
                     </div>
                   ))}
@@ -872,17 +872,17 @@ export default function Dashboard({ user, setUser }) {
         <footer className="redesigned-footer">
           <div className="footer-logo">
             <Zap className="logo-icon-green" size={20} fill="#8bc34a" />
-            <span>SnipURL</span>
+            <span>MagicURL</span>
           </div>
           <div className="footer-tagline">Shorten. Track. Optimize.</div>
-          <div className="footer-copy">© {new Date().getFullYear()} SnipURL. All rights reserved.</div>
+          <div className="footer-copy">© {new Date().getFullYear()} MagicURL. All rights reserved.</div>
         </footer>
       </div>
 
       {/* Persistent Copied Toast */}
       <AnimatePresence>
         {copiedId && (
-          <motion.div 
+          <motion.div
             className="toast"
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

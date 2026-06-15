@@ -16,7 +16,7 @@ export default function Navbar({ user, setUser }) {
     <nav className="navbar">
       <div className="nav-logo">
         <Link2 className="nav-logo-icon" />
-        <span>SnipURL</span>
+        <span>MagicURL</span>
       </div>
       {user && (
         <div className="nav-actions">

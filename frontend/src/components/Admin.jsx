@@ -4,8 +4,8 @@ import { api } from '../utils/api';
 import AnalyticsView from './AnalyticsView';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
-import { 
-  Link2, Trash2, ExternalLink, Calendar, 
+import {
+  Link2, Trash2, ExternalLink, Calendar,
   Users, BarChart2, Shield, Eye,
   Zap, Crown, LayoutDashboard, Globe, Settings, CreditCard, LogOut, TrendingUp, Award, Activity
 } from 'lucide-react';
@@ -123,7 +123,7 @@ export default function Admin({ user, setUser }) {
         <div>
           <div className="sidebar-logo">
             <Zap className="logo-icon-green" size={24} fill="#8bc34a" />
-            <span>SnipURL</span>
+            <span>MagicURL</span>
           </div>
 
           <nav className="sidebar-nav">
@@ -166,7 +166,7 @@ export default function Admin({ user, setUser }) {
         <header className="top-header">
           {/* Decorative Triangles in top right of top header */}
           <div className="decor-triangle-header"></div>
-          
+
           <div className="header-left">
             {user && (
               <div className="user-email-pill">
@@ -267,8 +267,8 @@ export default function Admin({ user, setUser }) {
                   {urls.map((url, index) => {
                     const colorClass = index % 3 === 0 ? 'green' : index % 3 === 1 ? 'teal' : 'blue';
                     return (
-                      <motion.div 
-                        key={url.id} 
+                      <motion.div
+                        key={url.id}
                         className={`link-row-card ${highlightedId === url.id ? 'flash-highlight' : ''}`}
                         layout
                         initial={{ opacity: 0, y: 15 }}
@@ -283,10 +283,10 @@ export default function Admin({ user, setUser }) {
                               <Link2 size={18} />
                             </div>
                             <div className="url-info">
-                              <a 
-                                href={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`} 
-                                target="_blank" 
-                                rel="noreferrer" 
+                              <a
+                                href={url.shortUrl || `${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`}
+                                target="_blank"
+                                rel="noreferrer"
                                 className="short-url-link"
                               >
                                 {url.shortUrl || `${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`}
@@ -317,15 +317,15 @@ export default function Admin({ user, setUser }) {
                           </div>
 
                           <div className="link-actions">
-                            <button 
+                            <button
                               className="action-btn"
                               onClick={() => setActiveAnalyticsId(url.id)}
                               title="View detailed visits"
                             >
                               <Eye size={16} />
                             </button>
-                            <button 
-                              className="action-btn btn-delete" 
+                            <button
+                              className="action-btn btn-delete"
                               onClick={() => handleDelete(url.id)}
                               title="Delete URL"
                             >
@@ -346,19 +346,19 @@ export default function Admin({ user, setUser }) {
         <footer className="redesigned-footer">
           <div className="footer-logo">
             <Zap className="logo-icon-green" size={20} fill="#8bc34a" />
-            <span>SnipURL</span>
+            <span>MagicURL</span>
           </div>
           <div className="footer-tagline">Shorten. Track. Optimize.</div>
-          <div className="footer-copy">© {new Date().getFullYear()} SnipURL. All rights reserved.</div>
+          <div className="footer-copy">© {new Date().getFullYear()} MagicURL. All rights reserved.</div>
         </footer>
       </div>
 
       {/* Analytics Modal details popup */}
       <AnimatePresence>
         {activeAnalyticsId && (
-          <AnalyticsView 
-            urlId={activeAnalyticsId} 
-            onClose={() => setActiveAnalyticsId(null)} 
+          <AnalyticsView
+            urlId={activeAnalyticsId}
+            onClose={() => setActiveAnalyticsId(null)}
           />
         )}
       </AnimatePresence>

@@ -81,7 +81,7 @@ export default function ResetPassword() {
           <div className="auth-logo-icon-wrap">
             <Link2 />
           </div>
-          <span className="auth-logo-name">SnipURL</span>
+          <span className="auth-logo-name">MagicURL</span>
         </div>
 
         <h2 className="auth-title">Reset Password</h2>

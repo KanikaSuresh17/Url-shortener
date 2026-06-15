@@ -79,13 +79,13 @@ async function forgotPassword(email) {
   const resetLink = `${FRONTEND_URL}/reset-password?token=${resetToken}`;
 
   await transporter.sendMail({
-    from: `"SnipURL" <${process.env.EMAIL_USER}>`,
+    from: `"MagicURL" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: 'Reset your SnipURL password',
+    subject: 'Reset your MagicURL password',
     html: `
       <div style="font-family: sans-serif; max-width: 480px; margin: auto; padding: 32px; background: #0b0f19; color: #f3f4f6; border-radius: 16px;">
         <h2 style="color: #6366f1; margin-bottom: 16px;">Reset Your Password</h2>
-        <p style="color: #9ca3af; margin-bottom: 24px;">You requested a password reset for your SnipURL account. Click the button below to set a new password. This link expires in <strong>1 hour</strong>.</p>
+        <p style="color: #9ca3af; margin-bottom: 24px;">You requested a password reset for your MagicURL account. Click the button below to set a new password. This link expires in <strong>1 hour</strong>.</p>
         <a href="${resetLink}" style="display: inline-block; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600;">Reset Password</a>
         <p style="color: #6b7280; font-size: 0.85rem; margin-top: 24px;">If you didn't request this, you can safely ignore this email.</p>
       </div>
