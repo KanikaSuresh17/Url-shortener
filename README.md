@@ -49,7 +49,6 @@ Standard URL shorteners only shorten links. There's no way to know who clicked, 
 | Real-time click updates | ✅ |
 | Visit history per URL | ✅ |
 | Admin panel | ✅ |
-| Forgot / Reset Password | ✅ |
 | QR Code generation + download | ✅ |
 | Edit destination URL | ✅ |
 | Inline analytics panel | ✅ |
@@ -103,13 +102,8 @@ Standard URL shorteners only shorten links. There's no way to know who clicked, 
 - Live click count updates via Socket.io on admin panel too
 - Eye icon opens analytics for any URL
 
-### 9. Forgot Password Flow
-- Request reset link via email (Nodemailer + Gmail)
-- Crypto token stored with 1-hour expiry in database
-- New password validated for min 8 chars + special character
-- Token cleared after successful reset
 
-### 10. Dashboard Statistics
+### 9. Dashboard Statistics
 Calculated client-side from the URL list:
 - **Total Links** — total URLs created
 - **Total Clicks** — sum of all click counts
@@ -146,8 +140,6 @@ App.jsx
 │   ├── AnalyticsPanel.jsx
 │   └── QRPanel.jsx
 ├── /admin              → Admin.jsx
-├── /forgot-password    → ForgotPassword.jsx
-└── /reset-password     → ResetPassword.jsx
 ```
 
 ### Backend Folder Structure
@@ -161,7 +153,7 @@ backend/
 │   ├── urlModel.js         → URL schema (id, originalUrl, shortCode, userId, clicks)
 │   └── visitModel.js       → Visit schema (id, urlId, timestamp, ip, userAgent)
 ├── controllers/
-│   ├── authController.js   → Register, Login, Forgot/Reset Password
+│   ├── authController.js   → Register, Login
 │   └── urlController.js    → Create, Read, Update, Delete, Analytics
 ├── services/
 │   ├── authService.js      → DB logic for auth (bcrypt, JWT, crypto token)
@@ -220,8 +212,6 @@ CREATE TABLE visits (
 |--------|-------|------|-------------|
 | POST | `/api/auth/register` | No | Register new user |
 | POST | `/api/auth/login` | No | Login, returns JWT |
-| POST | `/api/auth/forgot-password` | No | Send reset email |
-| POST | `/api/auth/reset-password` | No | Reset password via token |
 | GET | `/api/urls` | User | Get own URLs |
 | POST | `/api/urls` | User | Create short URL |
 | PUT | `/api/urls/:id` | User | Edit destination URL |
@@ -244,7 +234,6 @@ CREATE TABLE visits (
 | ORM | Sequelize | Simplified DB queries, model associations, auto sync |
 | Auth | JWT + bcrypt | Stateless auth, secure password hashing |
 | Realtime | Socket.io | Live click count push without polling |
-| Email | Nodemailer | Password reset emails via Gmail |
 | QR Code | qrcode.react | Client-side SVG QR generation, PNG download |
 | Frontend Deploy | Vercel | Auto-deploy from GitHub, global CDN |
 | Backend Deploy | Render | 24/7 hosted Node.js server, env variable management |
@@ -396,7 +385,6 @@ Each feature was planned as a prompt before implementation:
 - URL shortening with unique short code generation
 - Role-based access (user vs admin) via JWT payload and middleware
 - Socket.io integration for live click updates
-- Forgot/reset password with crypto token + Nodemailer
 - QR code generation with client-side PNG download
 - Edit destination URL without changing the short code
 
@@ -438,7 +426,6 @@ The video covers:
 - Exploring the analytics panel (visit history, timestamps)
 - Generating and downloading a QR code
 - Admin login and managing all users' links
-- Forgot password email flow
 - Editing a URL destination without changing the short code
 
 ---
@@ -448,7 +435,7 @@ The video covers:
 | Service | URL |
 |---------|-----|
 | Frontend (Vercel) | https://url-shortener-3i96.vercel.app |
-| Backend (Render) | https://url-shortener-zhkz.onrender.com |
+| Backend (Render) | https://url-shortener-zhkz.onrender.com (free tier — may take ~50 sec to wake up on first request)|
 
 ---
 
